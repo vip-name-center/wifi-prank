@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free High-Speed Wi-Fi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #38bdf8;
+        }
+        .image-box {
+            width: 100%;
+            height: 320px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            border: 2px dashed #475569;
+        }
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .play-btn {
+            margin-top: 15px;
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .play-btn:hover {
+            background: #0369a1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 id="status-text">ওয়াইফাই কানেক্ট হচ্ছে... অপেক্ষা করুন!</h2>
+        
+        <div class="image-box">
+            <img id="prank-image" src="" alt="Connecting...">
+        </div>
+
+        <p>ফ্রি হাই-স্পিড ইন্টারনেট লোড হচ্ছে! 😄</p>
+        
+        <!-- অডিও ট্যাগ -->
+        <audio id="prank-audio" preload="auto"></audio>
+
+        <!-- ব্রাউজার অটো-সাউন্ড ব্লক করলে এই বাটন দেখাবে -->
+        <button id="fallback-btn" class="play-btn" style="display: none;" onclick="playAudioManually()">ইন্টারনেট চালু করতে এখানে চাপুন</button>
+    </div>
+
+    <script>
+        // এখানে আপনার ১০ থেকে ১২টি (বা যত খুশি) ছবি এবং নির্দিষ্ট ভয়েস বা অডিওর লিংক পেয়ার করে বসাবেন
+        const prankData = [
+            {
+                image: "ggh.jpg",
+                audio: "hjjj.mp3"
+            },
+            {
+                image: "hhjj.jpg",
+                audio: "ikk.m4a"
+            },
+            {
+                image: "এখানে_৩য়_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_৩য়_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            },
+            {
+                image: "এখানে_৪র্থ_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_৪র্থ_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            },
+            {
+                image: "এখানে_৫ম_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_৫ম_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            },
+            {
+                image: "এখানে_৬ষ্ঠ_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_৬ষ্ঠ_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            },
+            {
+                image: "এখানে_৭ম_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_৭ম_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            },
+            {
+                image: "এখানে_৮ম_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_৮ম_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            },
+            {
+                image: "এখানে_৯ম_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_৯ম_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            },
+            {
+                image: "এখানে_১০ম_ছবির_লিংক_দিন.jpg",
+                audio: "এখানে_১০ম_ছবির_নির্দিষ্ট_ভয়েস_বা_অডিও_লিংক.mp3"
+            }
+            // চাইলে কমা (,) দিয়ে এভাবে আরও আইটেম নিচে বাড়িয়ে নিতে পারবেন
+        ];
+
+        // র‍্যান্ডমলি যেকোনো একটি প্র্যাঙ্ক সিলেক্ট করার কোড
+        const randomIndex = Math.floor(Math.random() * prankData.length);
+        const selectedPrank = prankData[randomIndex];
+
+        const imgElement = document.getElementById("prank-image");
+        const audioElement = document.getElementById("prank-audio");
+        const fallbackBtn = document.getElementById("fallback-btn");
+        const statusText = document.getElementById("status-text");
+
+        // নির্দিষ্ট ছবি এবং তার নির্দিষ্ট অডিও সেট করা
+        imgElement.src = selectedPrank.image;
+        audioElement.src = selectedPrank.audio;
+
+        // অটো ভয়েস বা অডিও প্লে করার চেষ্টা
+        window.addEventListener("DOMContentLoaded", () => {
+            let playPromise = audioElement.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    statusText.innerText = "উফ! ধরা খেয়ে গেছেন 😂";
+                }).catch(error => {
+                    fallbackBtn.style.display = "inline-block";
+                    statusText.innerText = "ইন্টারনেট কানেক্ট করতে নিচে ক্লিক করুন!";
+                });
+            }
+        });
+
+        function playAudioManually() {
+            audioElement.play();
+            fallbackBtn.style.display = "none";
+            statusText.innerText = "ধরা খেয়ে গেছেন! প্র্যাঙ্ক সফল 😂";
+        }
+    </script>
+
+</body>
+</html>
